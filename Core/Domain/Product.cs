@@ -4,13 +4,14 @@ namespace Core.Domain;
 
 public class Product
 {
-    [StringLength(50)]
-    public string Name { get; set; }
-    
     public DateTime ProduceDate { get; set; }
     
     [EmailAddress]
+    [StringLength(60)]
     public string? ManufactureEmail { get; set; }
+    
+    [StringLength(50)]
+    public string Name { get; set; }
     
     [Phone]
     public string? ManufacturePhone { get; set; }
