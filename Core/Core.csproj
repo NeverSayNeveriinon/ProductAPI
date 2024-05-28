@@ -6,8 +6,12 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+      <NoWarn>1701;1702;8618
+</NoWarn>
+    </PropertyGroup>
+
     <ItemGroup>
-      <Folder Include="DTO\" />
       <Folder Include="ServiceContracts\" />
       <Folder Include="Services\" />
     </ItemGroup>

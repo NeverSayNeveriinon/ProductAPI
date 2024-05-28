@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
 
 namespace Core.Domain;
 
@@ -7,14 +8,15 @@ public class Product
     public DateTime ProduceDate { get; set; }
     
     [StringLength(60)]
-    // [EmailAddress]
-    public string? ManufactureEmail { get; set; }
+    [Unicode(false)]
+    public string ManufactureEmail { get; set; }
     
-    [StringLength(50)]
+    [StringLength(40)]
+    [Unicode(false)]
     public string Name { get; set; }
     
-    [StringLength(11)]
-    // [RegularExpression(@"^0[0-9]{10}$")] // exp: 09001234567
+    [StringLength(maximumLength:11, MinimumLength = 11)]
+    [Unicode(false)]
     public string? ManufacturePhone { get; set; }
     
     public bool IsAvailable { get; set; }
