@@ -17,9 +17,10 @@ public interface IProductRepository
     /// <summary>
     /// Returns a product object based on the given product id
     /// </summary>
-    /// <param name="id">ProductID (guid) to search</param>
+    /// <param name="ProduceDate">Produce Date of Product to search along with email</param>
+    /// <param name="ManufactureEmail">Manufacture Email of Product to search along with date</param>
     /// <returns>A product object or null</returns>
-    Task<Product?> GetProductByID(Guid id);
+    Task<Product?> GetProductByKey(DateTime ProduceDate, string ManufactureEmail);
 
 
     /// <summary>
