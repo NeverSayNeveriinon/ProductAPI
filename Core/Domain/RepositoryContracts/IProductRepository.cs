@@ -15,7 +15,7 @@ public interface IProductRepository
 
 
     /// <summary>
-    /// Returns a product object based on the given product id
+    /// Returns a product object based on the given product Date & Email
     /// </summary>
     /// <param name="ProduceDate">Produce Date of Product to search along with email</param>
     /// <param name="ManufactureEmail">Manufacture Email of Product to search along with date</param>
