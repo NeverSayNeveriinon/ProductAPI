@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Core.Domain;
 
+// Key: {ProduceDate, ManufactureEmail}
 public class Product
 {
     public DateTime ProduceDate { get; set; }
