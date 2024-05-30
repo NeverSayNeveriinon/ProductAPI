@@ -77,7 +77,7 @@ public class Program
         // Generates OpenAPI specification
         builder.Services.AddSwaggerGen(options =>
         {
-            options.IncludeXmlComments("wwwroot/MoviesApp.xml"); // For Reading the 'XML' comments
+            options.IncludeXmlComments("wwwroot/ProductApp.xml"); // For Reading the 'XML' comments
         }); 
 
         

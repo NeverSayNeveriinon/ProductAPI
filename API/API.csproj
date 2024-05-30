@@ -6,6 +6,10 @@
         <ImplicitUsings>enable</ImplicitUsings>
     </PropertyGroup>
 
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+      <DocumentationFile>wwwroot/ProductApp.xml</DocumentationFile>
+    </PropertyGroup>
+
     <ItemGroup>
       <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.6" />
       <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.6">
