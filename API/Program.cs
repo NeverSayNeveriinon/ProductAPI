@@ -69,6 +69,16 @@ public class Program
                 IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
             };
         });
+        
+        
+        // Swagger
+        // Generates description for all endpoints (action methods)
+        builder.Services.AddEndpointsApiExplorer(); 
+        // Generates OpenAPI specification
+        builder.Services.AddSwaggerGen(options =>
+        {
+            options.IncludeXmlComments("wwwroot/MoviesApp.xml"); // For Reading the 'XML' comments
+        }); 
 
         
         var app = builder.Build();
@@ -78,6 +88,10 @@ public class Program
         // Https
         app.UseHsts();
         app.UseHttpsRedirection();
+        
+        // Swagger
+        app.UseSwagger(); // Creates endpoints for swagger.json
+        app.UseSwaggerUI(); // Creates swagger UI for testing all endpoints (action methods)
         
         app.UseStaticFiles();
 
