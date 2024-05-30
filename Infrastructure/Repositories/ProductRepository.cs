@@ -1,6 +1,7 @@
 ﻿using System.Linq.Expressions;
 using Core.Domain;
 using Core.Domain.RepositoryContracts;
+using Core.DTO;
 using Infrastructure.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 
@@ -26,11 +27,11 @@ public class ProductRepository : IProductRepository
         return moviesList;
     }
 
-    public async Task<Product?> GetProductByKey(DateTime ProduceDate, string ManufactureEmail)
+    public async Task<Product?> GetProductByKey(ProductKey productKey)
     {
         Product? movie = await _dbContext.Products.AsNoTracking()
-                                                  .FirstOrDefaultAsync(movieItem => movieItem.ProduceDate == ProduceDate 
-                                                                                    && movieItem.ManufactureEmail == ManufactureEmail);
+                                                  .FirstOrDefaultAsync(movieItem => movieItem.ProduceDate == productKey.ProduceDate 
+                                                                                    && movieItem.ManufactureEmail == productKey.ManufactureEmail);
         return movie;
     }
 

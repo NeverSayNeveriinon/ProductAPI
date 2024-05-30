@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using Core.DTO;
 
 namespace Core.Domain.RepositoryContracts;
 
@@ -17,10 +18,9 @@ public interface IProductRepository
     /// <summary>
     /// Returns a product object based on the given product Date & Email
     /// </summary>
-    /// <param name="ProduceDate">Produce Date of Product to search along with email</param>
-    /// <param name="ManufactureEmail">Manufacture Email of Product to search along with date</param>
+    /// <param name="productKey">Produce Date & Manufacture Email as Key of Product to search</param>
     /// <returns>A product object or null</returns>
-    Task<Product?> GetProductByKey(DateTime ProduceDate, string ManufactureEmail);
+    Task<Product?> GetProductByKey(ProductKey productKey);
 
 
     /// <summary>
