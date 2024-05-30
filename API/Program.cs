@@ -1,9 +1,16 @@
+using Core;
+using Core.Domain;
 using Core.Domain.RepositoryContracts;
 using Core.ServiceContracts;
 using Core.Services;
 using Infrastructure.DatabaseContext;
 using Infrastructure.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace API;
 
@@ -28,6 +35,41 @@ public class Program
             options.UseSqlServer(DBconnectionString);
         });
         
+        // Identity IOC
+        builder.Services.AddIdentity<ApplicationUser,ApplicationRole>(options => 
+            {
+                options.Password.RequiredLength = 5;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireDigit = false;
+                options.Password.RequiredUniqueChars = 3; //Eg: AB12AB
+            }).AddEntityFrameworkStores<AppDbContext>()
+            .AddUserStore<UserStore<ApplicationUser,ApplicationRole,AppDbContext,Guid>>()
+            .AddRoleStore<RoleStore<ApplicationRole,AppDbContext,Guid>>()
+            .AddDefaultTokenProviders();
+        
+        
+        // JWT
+        builder.Services.AddAuthentication(options => 
+        {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        })
+        .AddJwtBearer(options => 
+        {
+            options.TokenValidationParameters = new TokenValidationParameters() 
+            {
+                ValidateAudience = true,
+                ValidAudience = builder.Configuration["Jwt:Audience"],
+                ValidateIssuer = true,
+                ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+            };
+        });
+
         
         var app = builder.Build();
 
@@ -38,8 +80,11 @@ public class Program
         app.UseHttpsRedirection();
         
         app.UseStaticFiles();
-        app.MapControllers();
 
+        app.UseRouting(); 
+        app.UseAuthentication(); 
+        app.UseAuthorization(); 
+        app.MapControllers(); 
         
         app.Run();
     }
