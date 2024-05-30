@@ -1,9 +1,11 @@
 ﻿using Core.Domain;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.DatabaseContext;
 
-public class AppDbContext : DbContext
+public class AppDbContext : IdentityDbContext<ApplicationUser,ApplicationRole,Guid>
 {
     public DbSet<Product> Products { get; set; }
     
