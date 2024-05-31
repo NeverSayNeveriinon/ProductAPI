@@ -23,26 +23,26 @@ public interface IProductService
 
 
     /// <summary>
-    /// Retrieve a Product object from products list based on given id
+    /// Retrieve a Product object from products list based on given key
     /// </summary>
-    /// <param name="ID">the product id to be searched for</param>
+    /// <param name="productKey">the product key (Data and Email) to be searched for</param>
     /// <returns></returns>
-    public Task<ProductResponse?> GetProductByID(Guid? ID);
+    public Task<ProductResponse?> GetProductByKey(ProductKey? productKey);
     
 
     /// <summary>
     /// Find the object in products list and update it with new details, then returns the 'Product' object
     /// </summary>
-    /// <param name="productUpdateRequest"></param>
-    /// <param name="productID"></param>
+    /// <param name="productUpdateRequest">the new product object to be updated</param>
+    /// <param name="productKey">the product key (Data and Email) to be searched for</param>
     /// <returns>Returns the product with updated details</returns>
-    public Task<ProductResponse?> UpdateProduct(ProductRequest? productUpdateRequest, Guid? productID);
+    public Task<ProductResponse?> UpdateProduct(ProductRequest? productUpdateRequest, ProductKey? productKey);
 
 
     /// <summary>
-    /// Find and Delete the product object with given 'id' from the 'products list'
+    /// Find and Delete the product object with given 'key' from the 'products list'
     /// </summary>
-    /// <param name="ID"></param>
+    /// <param name="productKey">the product key (Data and Email) to be searched for</param>
     /// <returns>Returns 'True' if product is deleted and if it isn't 'False'</returns>
-    public Task<bool?> DeleteProduct(Guid? ID); 
+    public Task<bool?> DeleteProduct(ProductKey? productKey); 
 }

@@ -1,18 +1,23 @@
 ﻿using Core.Domain;
 using Core.Domain.RepositoryContracts;
 using Core.DTO;
+using Core.Helpers;
 using Core.ServiceContracts;
+using Microsoft.AspNetCore.Identity;
 
 namespace Core.Services;
 
 public class ProductService : IProductService
 {
     private readonly IProductRepository _productRepository;
+    private readonly UserManager<ApplicationUser> _userManager;
 
-    public ProductService(IProductRepository productRepository)
+    public ProductService(IProductRepository productRepository, UserManager<ApplicationUser> userManager)
     {
         _productRepository = productRepository;
+        _userManager = userManager;
     }
+
 
     public Task<ProductResponse> AddProduct(ProductRequest? productAddRequest)
     {
@@ -24,17 +29,17 @@ public class ProductService : IProductService
         throw new NotImplementedException();
     }
 
-    public Task<ProductResponse?> GetProductByID(Guid? ID)
+    public Task<ProductResponse?> GetProductByKey(ProductKey? productKey)
     {
         throw new NotImplementedException();
     }
 
-    public Task<ProductResponse?> UpdateProduct(ProductRequest? productUpdateRequest, Guid? productID)
+    public Task<ProductResponse?> UpdateProduct(ProductRequest? productUpdateRequest, ProductKey? productKey)
     {
         throw new NotImplementedException();
     }
 
-    public Task<bool?> DeleteProduct(Guid? ID)
+    public Task<bool?> DeleteProduct(ProductKey? productKey)
     {
         throw new NotImplementedException();
     }
