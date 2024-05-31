@@ -1,3 +1,4 @@
+using System.Text;
 using Core;
 using Core.Domain;
 using Core.Domain.RepositoryContracts;
@@ -11,6 +12,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 
 namespace API;
 
@@ -51,25 +53,20 @@ public class Program
         
         
         // JWT
-        builder.Services.AddAuthentication(options => 
-        {
-            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-        })
-        .AddJwtBearer(options => 
-        {
-            options.TokenValidationParameters = new TokenValidationParameters() 
+        builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
             {
-                ValidateAudience = true,
-                ValidAudience = builder.Configuration["Jwt:Audience"],
-                ValidateIssuer = true,
-                ValidIssuer = builder.Configuration["Jwt:Issuer"],
-                ValidateLifetime = true,
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
-            };
-        });
-        
+                options.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidateAudience = false,
+                    ValidAudience = builder.Configuration["Jwt:Audience"],
+                    ValidateIssuer = false,
+                    ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+                };
+            });
         
         // Swagger
         // Generates description for all endpoints (action methods)
@@ -78,6 +75,30 @@ public class Program
         builder.Services.AddSwaggerGen(options =>
         {
             options.IncludeXmlComments("wwwroot/ProductApp.xml"); // For Reading the 'XML' comments
+            options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            {
+                In = ParameterLocation.Header,
+                Description = "Please Enter JWT Token",
+                Name = "Authorization",
+                Type = SecuritySchemeType.Http,
+                BearerFormat = "JWT",
+                Scheme = "bearer"
+            });
+
+            options.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type=ReferenceType.SecurityScheme,
+                            Id="Bearer"
+                        }
+                    },
+                    new string[]{}
+                }
+            });
         }); 
 
         

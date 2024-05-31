@@ -27,7 +27,7 @@ public class JwtService : IJwtService
     /// <returns>AuthenticationResponse that includes token</returns>
     public AuthenticationResponse CreateJwtToken(ApplicationUser user)
     {
-        DateTime expiration = DateTime.UtcNow.AddMinutes(Convert.ToDouble(_configuration["Jwt:EXPIRATION_MINUTES"]));
+        DateTime expiration = DateTime.Now.AddMinutes(Convert.ToDouble(_configuration["Jwt:EXPIRATION_MINUTES"]));
 
         Claim[] claims = new Claim[] 
         {
