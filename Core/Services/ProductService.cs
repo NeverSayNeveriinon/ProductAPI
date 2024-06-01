@@ -63,9 +63,11 @@ public class ProductService : IProductService
         return productResponse;
     }
 
-    public Task<List<ProductResponse>> GetAllProducts()
+    public async Task<List<ProductResponse>> GetAllProducts()
     {
-        throw new NotImplementedException();
+        var products = await _productRepository.GetAllProducts();
+        var productsResponses = products.Select(prouduct => prouduct.Adapt<ProductResponse>()).ToList();
+        return productsResponses;
     }
 
     public Task<ProductResponse?> GetProductByKey(ProductKey? productKey)
