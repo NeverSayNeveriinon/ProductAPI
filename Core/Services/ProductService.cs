@@ -113,8 +113,21 @@ public class ProductService : IProductService
         return updatedProduct.Adapt<ProductResponse>();
     }
 
-    public Task<bool?> DeleteProduct(ProductKey? productKey)
+    public async Task<bool?> DeleteProduct(ProductKey? productKey)
     {
-        throw new NotImplementedException();
+        // if 'Key' is null
+        ArgumentNullException.ThrowIfNull(productKey,"The 'ProductKey' parameter is Null");
+
+        Product? product = await _productRepository.GetProductByKey(productKey);
+        
+        // if 'Key' is invalid (doesn't exist)
+        if (product == null) 
+        {
+            return null;
+        }
+    
+        bool result = await _productRepository.DeleteProduct(product);
+            
+        return result;
     }
 }
