@@ -66,9 +66,23 @@ public class ProductService : IProductService
         return productsResponses;
     }
 
-    public Task<ProductResponse?> GetProductByKey(ProductKey? productKey)
+    public async Task<ProductResponse?> GetProductByKey(ProductKey? productKey)
     {
-        throw new NotImplementedException();
+        // if 'productKey' is null
+        ArgumentNullException.ThrowIfNull(productKey,"The 'ProductKey' parameter is Null");
+
+        Product? product = await _productRepository.GetProductByKey(productKey);
+
+        // if no product with corresponding 'Key' exist in 'products list' 
+        if (product == null)
+        {
+            return null;
+        }
+
+        // if there is no problem
+        ProductResponse productResponse = product.Adapt<ProductResponse>();
+
+        return productResponse;  
     }
 
     public Task<ProductResponse?> UpdateProduct(ProductRequest? productUpdateRequest, ProductKey? productKey)
