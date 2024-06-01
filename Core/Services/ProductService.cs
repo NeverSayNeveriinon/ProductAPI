@@ -32,7 +32,7 @@ public class ProductService : IProductService
 
 
         // 'productAddRequest.Name' is Empty or Null//
-        ArgumentNullException.ThrowIfNullOrEmpty(productAddRequest.Name,"The 'Product Name' in 'ProductRequest' object can't be blank");
+        ArgumentException.ThrowIfNullOrEmpty(productAddRequest.Name,"The 'Product Name' in 'ProductRequest' object can't be blank");
 
         
         // Other Validations
@@ -85,9 +85,32 @@ public class ProductService : IProductService
         return productResponse;  
     }
 
-    public Task<ProductResponse?> UpdateProduct(ProductRequest? productUpdateRequest, ProductKey? productKey)
+    public async Task<ProductResponse?> UpdateProduct(ProductRequest? productUpdateRequest, ProductKey? productKey)
     {
-        throw new NotImplementedException();
+        // if 'product ID' is null
+        ArgumentNullException.ThrowIfNull(productKey,"The 'ProductKey' parameter is Null");
+        
+        // if 'productUpdateRequest' is null
+        ArgumentNullException.ThrowIfNull(productUpdateRequest,"The 'ProductRequest' object parameter is Null");
+
+        // 'productUpdateRequest.Name' is Empty or Null//
+        ArgumentException.ThrowIfNullOrEmpty(productUpdateRequest.Name,"The 'Product Name' in 'ProductRequest' object can't be blank");
+
+        
+        // Validation
+        // ValidationHelper.ModelValidation(productUpdateRequest);
+
+        Product? product = await _productRepository.GetProductByKey(productKey);
+        
+        // if 'ID' is invalid (doesn't exist)
+        if (product == null)
+        {
+            return null;
+        }
+            
+        Product updatedProduct = await _productRepository.UpdateProduct(product, productUpdateRequest.Adapt<Product>());
+
+        return updatedProduct.Adapt<ProductResponse>();
     }
 
     public Task<bool?> DeleteProduct(ProductKey? productKey)
