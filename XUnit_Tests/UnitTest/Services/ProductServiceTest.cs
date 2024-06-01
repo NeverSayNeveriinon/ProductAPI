@@ -132,5 +132,62 @@ public class ProductServiceTest
     }
 
     #endregion
- 
+    
+    
+    #region GetAllProducts
+
+    [Fact]
+    public async Task GetAllProducts_ShouldReturnEmptyList_WhenDBListIsEmpty()
+    {
+        // Arrange
+        var emptyList = new List<Product>();
+            
+        // Mocking the Required Methods
+        _productRepositoryMock.Setup(entity => entity.GetAllProducts())
+                              .ReturnsAsync(emptyList);
+            
+        // Act
+        List<ProductResponse> productResponseList = await _productService.GetAllProducts();
+
+        // Assert
+        productResponseList.Should().BeEmpty();
+    }
+
+    [Fact]
+    public async Task GetAllProducts_ShouldReturnProperObjects_WhenThereIsNoProblem()
+    {
+        // Arrange
+        Product product1 = new Product()
+        {
+            Name = "Book no.1",
+            IsAvailable = true
+
+        };
+        Product product2 = new Product()
+        {
+            Name = "Book no.2",
+            IsAvailable = false
+
+        };
+        List<Product> productRequestsList = new List<Product>() { product1, product2 };
+            
+        List<Product> productList = new List<Product>() { product1, product2 };
+        List<ProductResponse> productResponsesList_fromTest = productList.Select(product => product.Adapt<ProductResponse>()).ToList();
+            
+        // Mocking the Required Methods
+        _productRepositoryMock.Setup(entity => entity.GetAllProducts())
+                              .ReturnsAsync(productList);
+            
+        // Act
+        List<ProductResponse> productResponseList_fromService = await _productService.GetAllProducts();
+
+
+        // Assert
+        productResponseList_fromService.Should().BeEquivalentTo(productResponsesList_fromTest);
+    }
+
+    #endregion
+    
+    
+    
 }
