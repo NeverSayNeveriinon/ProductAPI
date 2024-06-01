@@ -338,7 +338,7 @@ public class ProductServiceTest
                               .ReturnsAsync(null as Product);
 
         // Act
-        ProductResponse? productResponse =  await _productService.UpdateProduct(productUpdateRequest, productKey);
+        ProductResponse? productResponse = await _productService.UpdateProduct(productUpdateRequest, productKey);
         
         // Assert
         productResponse.Should().BeNull();
@@ -392,5 +392,74 @@ public class ProductServiceTest
     #endregion
     
     
-    
+    #region DeleteProduct
+
+    [Fact]
+    public async Task DeleteProduct_ShouldThrowArgumentNullException_WhenProductKeyIsNull()
+    {
+        // Arrange
+        ProductKey? productKey = null;
+
+        // Act
+        Func<Task> action = async () => await _productService.DeleteProduct(productKey);
+        
+        // Assert
+        await action.Should().ThrowAsync<ArgumentNullException>();
+    }
+
+    [Fact]
+    public async Task DeleteProduct_ShouldReturnNull_WhenProductIsNotFound()
+    {
+        // Arrange
+        ProductKey productKey = new ProductKey()
+        {
+            ManufactureEmail = "user@example.com",
+            ProduceDate = DateTime.Parse("2024/06/01 19:00:00")
+        };
+
+        // Mocking the Required Methods
+        _productRepositoryMock.Setup(entity => entity.GetProductByKey(It.IsAny<ProductKey>()))
+                              .ReturnsAsync(null as Product);
+            
+        // Act
+        bool? isDeleted_fromService = await _productService.DeleteProduct(productKey);
+
+        // Assert
+        isDeleted_fromService.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task DeleteProduct_Valid()
+    {
+        // Arrange
+        Product product = new Product()
+        {
+            ManufactureEmail = "user@example.com",
+            ProduceDate = DateTime.Parse("2024/06/01 19:00:00"),
+            ManufacturePhone = "09990123456",
+            Name = "Book No.1",
+            IsAvailable = false
+        };
+        
+        ProductKey productKey = new ProductKey()
+        {
+            ManufactureEmail = "user@example.com",
+            ProduceDate = DateTime.Parse("2024/06/01 19:00:00")
+        };
+
+        // Mocking the Required Methods
+        _productRepositoryMock.Setup(entity => entity.GetProductByKey(It.IsAny<ProductKey>()))
+                              .ReturnsAsync(product);
+            
+        _productRepositoryMock.Setup(entity => entity.DeleteProduct(It.IsAny<Product>()))
+                              .ReturnsAsync(true);
+            
+        // Act
+        bool? isDeleted_fromService = await _productService.DeleteProduct(productKey);
+
+        // Assert
+        isDeleted_fromService.Should().BeTrue();
+    }
+
+    #endregion
 }
