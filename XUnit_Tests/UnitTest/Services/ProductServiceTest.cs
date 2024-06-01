@@ -55,9 +55,8 @@ public class ProductServiceTest
         await action.Should().ThrowAsync<ArgumentNullException>();
     }
 
-
     [Fact]
-    public async Task AddProduct_ShouldThrowArgumentNullException_WhenNameOfProductRequestIsNullOrEmpty()
+    public async Task AddProduct_ShouldThrowArgumentException_WhenNameOfProductRequestIsEmpty()
     {
         // Arrange
         ProductRequest productAddRequest = new ProductRequest()
@@ -70,7 +69,7 @@ public class ProductServiceTest
         Func<Task> action = async () => await _productService.AddProduct(productAddRequest);
         
         // Assert
-        await action.Should().ThrowAsync<ArgumentNullException>();
+        await action.Should().ThrowAsync<ArgumentException>();
     }
     
     [Fact]
@@ -89,7 +88,6 @@ public class ProductServiceTest
         // Assert
         await action.Should().ThrowAsync<ArgumentException>();
     }
-    
 
     // When 'ProductRequest.Name' is valid then there is no problem, it should add the product object to products list
     [Fact]
@@ -113,11 +111,13 @@ public class ProductServiceTest
             
         // Mocking the Required Methods
         _productRepositoryMock.Setup(entity => entity.AddProduct(It.IsAny<Product>()))
-            .ReturnsAsync(product);   
+                              .ReturnsAsync(product);   
+        
         _httpContextAccessorMock.SetupGet(entity => entity.HttpContext!.User.Identity!.Name)
-            .Returns(userName);
+                                .Returns(userName);
+        
         _userManagerMock.Setup(entity => entity.GetUserAsync(It.IsAny<ClaimsPrincipal>()))
-            .ReturnsAsync(applicationUser);   
+                        .ReturnsAsync(applicationUser);   
             
         // Act
         ProductResponse productResponse_fromService = await _productService.AddProduct(productAddRequest);
@@ -169,8 +169,6 @@ public class ProductServiceTest
             IsAvailable = false
 
         };
-        List<Product> productRequestsList = new List<Product>() { product1, product2 };
-            
         List<Product> productList = new List<Product>() { product1, product2 };
         List<ProductResponse> productResponsesList_fromTest = productList.Select(product => product.Adapt<ProductResponse>()).ToList();
             
@@ -189,7 +187,7 @@ public class ProductServiceTest
     #endregion
     
     
-    #region GetProductByID
+    #region GetProductByKey
 
     [Fact]
     public async Task GetProductByKey_ShouldThrowArgumentNullException_WhenProductKeyIsNull()
@@ -205,7 +203,7 @@ public class ProductServiceTest
     }
 
     [Fact]
-    public async Task GetProductByKey_ShouldReturnNull_WhenProductKeyIsNotFound()
+    public async Task GetProductByKey_ShouldReturnNull_WhenProductIsNotFound()
     {
         // Arrange
         ProductKey productKey = new ProductKey()
@@ -245,7 +243,7 @@ public class ProductServiceTest
         ProductResponse productResponse_fromTest = product.Adapt<ProductResponse>();
 
         _productRepositoryMock.Setup(entity => entity.GetProductByKey(It.IsAny<ProductKey>()))
-            .ReturnsAsync(product);
+                              .ReturnsAsync(product);
             
         // Act
         ProductResponse? productResponse_fromService = await _productService.GetProductByKey(productKey);
@@ -254,6 +252,145 @@ public class ProductServiceTest
         productResponse_fromService.Should().BeEquivalentTo(productResponse_fromTest);
     }
 
+    #endregion
+    
+    
+    #region UpdateProduct
 
-    #endregion 
+    [Fact]
+    public async Task UpdateProduct_ShouldThrowArgumentNullException_WhenProductRequestIsNull()
+    {
+        // Arrange
+        ProductRequest? productUpdateRequest = null;
+        ProductKey productKey = new ProductKey()
+        {
+            ManufactureEmail = "user@example.com",
+            ProduceDate = DateTime.Parse("2024/06/01 19:00:00")
+        };
+        
+        // Act
+        Func<Task> action = async () => await _productService.UpdateProduct(productUpdateRequest,productKey);
+        
+        // Assert
+        await action.Should().ThrowAsync<ArgumentNullException>();
+    }
+    
+    [Fact]
+    public async Task UpdateProduct_ShouldThrowArgumentNullException_WhenProductKeyIsNull()
+    {
+        // Arrange
+        ProductRequest productUpdateRequest = new ProductRequest()
+        {
+            Name = "Book No.1",
+            IsAvailable = true
+        };
+        ProductKey? productKey = null;
+        
+        // Act
+        Func<Task> action = async () => await _productService.UpdateProduct(productUpdateRequest,productKey);
+        
+        // Assert
+        await action.Should().ThrowAsync<ArgumentNullException>();
+    }
+
+    [Fact]
+    public async Task UpdateProduct_ShouldThrowArgumentNullException_WhenNameOfProductRequestIsEmpty()
+    {
+        // Arrange
+        ProductRequest productUpdateRequest = new ProductRequest()
+        {
+            Name = "",
+            IsAvailable = true
+        };
+
+        ProductKey productKey = new ProductKey()
+        {
+            ManufactureEmail = "user@example.com",
+            ProduceDate = DateTime.Parse("2024/06/01 19:00:00")
+        };
+        
+        // Act
+        Func<Task> action = async () => await _productService.UpdateProduct(productUpdateRequest, productKey);
+        
+        // Assert
+        await action.Should().ThrowAsync<ArgumentException>();
+    }
+
+    [Fact]
+    public async Task UpdateProduct_ShouldReturnNull_WhenProductIsNotFound()
+    {
+        // Arrange
+        ProductRequest productUpdateRequest = new ProductRequest()
+        {
+            Name = "Book No.1",
+            IsAvailable = true
+        };
+        ProductKey productKey = new ProductKey()
+        {
+            ManufactureEmail = "user@example.com",
+            ProduceDate = DateTime.Parse("2024/06/01 19:00:00")
+        };
+            
+        Product updatedProduct = productUpdateRequest.Adapt<Product>();
+            
+        // Mocking the Required Methods
+        _productRepositoryMock.Setup(entity => entity.GetProductByKey(It.IsAny<ProductKey>()))
+                              .ReturnsAsync(null as Product);
+
+        // Act
+        ProductResponse? productResponse =  await _productService.UpdateProduct(productUpdateRequest, productKey);
+        
+        // Assert
+        productResponse.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task UpdateProduct_ShouldUpdateAndReturnProperObject_WhenThereIsNoProblem()
+    {
+        // Arrange
+        Product product = new Product()
+        {
+            ManufactureEmail = "user@example.com",
+            ProduceDate = DateTime.Parse("2024/06/01 19:00:00"),
+            ManufacturePhone = "09990123456",
+            Name = "Book No.1",
+            IsAvailable = false
+        };
+        
+        ProductRequest productUpdateRequest = new ProductRequest()
+        {
+            Name = "Book No.222",
+            IsAvailable = true
+        };
+        ProductKey productKey = new ProductKey()
+        {
+            ManufactureEmail = "user@example.com",
+            ProduceDate = DateTime.Parse("2024/06/01 19:00:00")
+        };
+            
+        Product updatedProduct = productUpdateRequest.Adapt<Product>();
+        updatedProduct.ManufactureEmail = product.ManufactureEmail;
+        updatedProduct.ProduceDate = product.ProduceDate;
+        updatedProduct.ManufacturePhone = product.ManufacturePhone;
+
+        
+        // Mocking the Required Methods
+        _productRepositoryMock.Setup(entity => entity.GetProductByKey(It.IsAny<ProductKey>())) 
+                              .ReturnsAsync(product);    
+
+        _productRepositoryMock.Setup(entity => entity.UpdateProduct(It.IsAny<Product>(),It.IsAny<Product>()))
+                              .ReturnsAsync(updatedProduct);  
+            
+        // Act
+        ProductResponse productResponse_fromTest = updatedProduct.Adapt<ProductResponse>();
+        ProductResponse? productResponse_fromService = await _productService.UpdateProduct(productUpdateRequest, productKey);
+            
+        // Assert
+        productResponse_fromService.Should().BeEquivalentTo(productResponse_fromTest);
+    }
+
+    #endregion
+    
+    
+    
 }

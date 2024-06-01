@@ -20,44 +20,46 @@ public class ProductRepository : IProductRepository
 
     public async Task<List<Product>> GetAllProducts()
     {
-        var movies = _dbContext.Products.AsNoTracking();
+        var products = _dbContext.Products.AsNoTracking();
         
-        List<Product> moviesList = await movies.ToListAsync();
+        List<Product> productsList = await products.ToListAsync();
         
-        return moviesList;
+        return productsList;
     }
 
     public async Task<Product?> GetProductByKey(ProductKey productKey)
     {
-        Product? movie = await _dbContext.Products.AsNoTracking()
-                                                  .FirstOrDefaultAsync(movieItem => movieItem.ProduceDate == productKey.ProduceDate 
-                                                                                    && movieItem.ManufactureEmail == productKey.ManufactureEmail);
-        return movie;
+        Product? product = await _dbContext.Products.AsNoTracking()
+                                                  .FirstOrDefaultAsync(productItem => productItem.ProduceDate == productKey.ProduceDate 
+                                                                                    && productItem.ManufactureEmail == productKey.ManufactureEmail);
+        return product;
     }
 
      
-    public async Task<Product> AddProduct(Product movie)
+    public async Task<Product> AddProduct(Product product)
     {
-        _dbContext.Products.Add(movie);
+        _dbContext.Products.Add(product);
         await _dbContext.SaveChangesAsync();
 
-        return movie;
+        return product;
     }
     
-    public async Task<Product> UpdateProduct(Product movie, Product updatedProduct)
+    public async Task<Product> UpdateProduct(Product product, Product updatedProduct)
     {
-        // _dbContext.Attach(movie);
-        _dbContext.Entry(movie).State = EntityState.Modified;
+        // _dbContext.Attach(product);
+        // _dbContext.Entry(product).State = EntityState.Modified;
+        // _dbContext.Entry(product).CurrentValues.SetValues(updatedProduct);
 
-        _dbContext.Entry(movie).CurrentValues.SetValues(updatedProduct);
+        product.Name = updatedProduct.Name;
+        product.IsAvailable = updatedProduct.IsAvailable;
         
         await _dbContext.SaveChangesAsync();
-        return movie;
+        return product;
     }
     
-    public async Task<bool> DeleteProduct(Product movie)
+    public async Task<bool> DeleteProduct(Product product)
     {
-        _dbContext.Products.Remove(movie);
+        _dbContext.Products.Remove(product);
         int rowsAffected = await _dbContext.SaveChangesAsync();
         
         bool result = rowsAffected > 0 ? true : false;
@@ -67,8 +69,8 @@ public class ProductRepository : IProductRepository
 
     public async Task<List<Product>> GetFilteredProducts(Expression<Func<Product, bool>> predicate)
     {
-        List<Product> moviesList = await _dbContext.Products.Where(predicate)
+        List<Product> productsList = await _dbContext.Products.Where(predicate)
                                                             .ToListAsync();
-        return moviesList;
+        return productsList;
     }
 }
