@@ -28,16 +28,12 @@ public class ProductService : IProductService
     public async Task<ProductResponse> AddProduct(ProductRequest? productAddRequest)
     {
         // 'productAddRequest' is Null //
-        if (productAddRequest == null)
-        {
-            throw new ArgumentNullException("'ProductAddRequest' object is Null");
-        }
+        ArgumentNullException.ThrowIfNull(productAddRequest,"The 'ProductRequest' object parameter is Null");
 
-        // 'productAddRequest.Name' is Null //
-        if (string.IsNullOrEmpty(productAddRequest.Name))
-        {
-            throw new ArgumentNullException("The 'Product Name' in 'ProductAddRequest' object can't be blank");
-        }
+
+        // 'productAddRequest.Name' is Empty or Null//
+        ArgumentNullException.ThrowIfNullOrEmpty(productAddRequest.Name,"The 'Product Name' in 'ProductRequest' object can't be blank");
+
         
         // Other Validations
         ValidationHelper.ModelValidation(productAddRequest);
@@ -65,8 +61,8 @@ public class ProductService : IProductService
 
     public async Task<List<ProductResponse>> GetAllProducts()
     {
-        var products = await _productRepository.GetAllProducts();
-        var productsResponses = products.Select(prouduct => prouduct.Adapt<ProductResponse>()).ToList();
+        List<Product> products = await _productRepository.GetAllProducts();
+        List<ProductResponse> productsResponses = products.Select(prouduct => prouduct.Adapt<ProductResponse>()).ToList();
         return productsResponses;
     }
 
