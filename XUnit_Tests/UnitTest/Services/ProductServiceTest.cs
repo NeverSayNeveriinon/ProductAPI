@@ -189,5 +189,71 @@ public class ProductServiceTest
     #endregion
     
     
-    
+    #region GetProductByID
+
+    [Fact]
+    public async Task GetProductByKey_ShouldThrowArgumentNullException_WhenProductKeyIsNull()
+    {
+        // Arrange
+        ProductKey? productKey = null;
+
+        // Act
+        Func<Task> action = async () =>  await _productService.GetProductByKey(productKey);
+        
+        // Assert
+        await action.Should().ThrowAsync<ArgumentNullException>();
+    }
+
+    [Fact]
+    public async Task GetProductByKey_ShouldReturnNull_WhenProductKeyIsNotFound()
+    {
+        // Arrange
+        ProductKey productKey = new ProductKey()
+        {
+            ManufactureEmail = "user@example.com",
+            ProduceDate = DateTime.Parse("2024/06/01 19:00:00"),
+        };
+            
+        // Mocking the Required Methods
+        _productRepositoryMock.Setup(entity => entity.GetProductByKey(It.IsAny<ProductKey>()))
+            .ReturnsAsync(null as Product);
+        
+        // Act
+        ProductResponse? productResponse = await _productService.GetProductByKey(productKey);
+
+        // Assert
+        productResponse.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task GetProductByKey_ShouldReturnProperObject_WhenThereIsNoProblem()
+    {
+        // Arrange
+        Product product = new Product()
+        {
+            ManufactureEmail = "user@example.com",
+            ProduceDate = DateTime.Parse("2024/06/01 19:00:00"),
+            ManufacturePhone = "09990123456",
+            Name = "Book No.1",
+            IsAvailable = false
+        };
+        ProductKey productKey = new ProductKey()
+        {
+            ManufactureEmail = "user@example.com",
+            ProduceDate = DateTime.Parse("2024/06/01 19:00:00"),
+        };  
+        ProductResponse productResponse_fromTest = product.Adapt<ProductResponse>();
+
+        _productRepositoryMock.Setup(entity => entity.GetProductByKey(It.IsAny<ProductKey>()))
+            .ReturnsAsync(product);
+            
+        // Act
+        ProductResponse? productResponse_fromService = await _productService.GetProductByKey(productKey);
+
+        // Assert
+        productResponse_fromService.Should().BeEquivalentTo(productResponse_fromTest);
+    }
+
+
+    #endregion 
 }
