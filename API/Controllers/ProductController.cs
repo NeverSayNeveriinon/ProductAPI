@@ -42,9 +42,9 @@ public class ProductController : ControllerBase
     /// <response code="200">The Products List is successfully returned</response>
     [HttpGet("/api/Products")]
     // GET: api/Products
-    public async Task<ActionResult<IEnumerable<ProductResponse>>> GetProducts()
+    public async Task<ActionResult<IEnumerable<ProductResponse>>> GetProducts([FromQuery] string? filterEmail)
     {
-        List<ProductResponse> productsList = await _productService.GetAllProducts();
+        List<ProductResponse> productsList = await _productService.GetAllProducts(filterEmail);
         return Ok(productsList);
     }
     

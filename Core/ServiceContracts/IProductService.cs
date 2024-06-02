@@ -19,7 +19,7 @@ public interface IProductService
     /// Retrieve all Product objects from products list
     /// </summary>
     /// <returns>Returns all existing Products</returns>
-    public Task<List<ProductResponse>> GetAllProducts();
+    public Task<List<ProductResponse>> GetAllProducts(string? FilterEmail);
 
 
     /// <summary>

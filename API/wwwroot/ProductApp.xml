@@ -4,7 +4,7 @@
         <name>API</name>
     </assembly>
     <members>
-        <member name="M:Web.Controllers.ProductController.GetProducts">
+        <member name="M:Web.Controllers.ProductController.GetProducts(System.String)">
             <summary>
             Get All Existing Products
             </summary>

@@ -57,9 +57,18 @@ public class ProductService : IProductService
         return productResponse;
     }
 
-    public async Task<List<ProductResponse>> GetAllProducts()
+    public async Task<List<ProductResponse>> GetAllProducts(string? FilterEmail)
     {
-        List<Product> products = await _productRepository.GetAllProducts();
+        List<Product> products = new List<Product>();
+        if (!string.IsNullOrEmpty(FilterEmail))
+        {
+            products = await _productRepository.GetFilteredProducts(record => record.ManufactureEmail == FilterEmail);
+        }
+        else
+        {
+            products = await _productRepository.GetAllProducts();
+        }
+
         List<ProductResponse> productsResponses = products.Select(prouduct => prouduct.Adapt<ProductResponse>()).ToList();
         return productsResponses;
     }
