@@ -58,9 +58,9 @@ public class Program
             {
                 options.TokenValidationParameters = new TokenValidationParameters()
                 {
-                    ValidateAudience = false,
+                    ValidateAudience = true,
                     ValidAudience = builder.Configuration["Jwt:Audience"],
-                    ValidateIssuer = false,
+                    ValidateIssuer = true,
                     ValidIssuer = builder.Configuration["Jwt:Issuer"],
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
@@ -103,6 +103,15 @@ public class Program
 
         
         var app = builder.Build();
+        
+        
+        // using (var scope = app.Services.CreateScope())
+        // {
+        //     var context = scope.ServiceProvider.GetService<AppDbContext>();
+        //     context?.Database.EnsureDeleted();
+        //     context?.Database.EnsureCreated();
+        //     // context?.Database.Migrate();
+        // }
 
         // Middlewares //
         
