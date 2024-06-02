@@ -147,7 +147,7 @@ public class ProductServiceTest
                               .ReturnsAsync(emptyList);
             
         // Act
-        List<ProductResponse> productResponseList = await _productService.GetAllProducts();
+        List<ProductResponse> productResponseList = await _productService.GetAllProducts(null);
 
         // Assert
         productResponseList.Should().BeEmpty();
@@ -177,7 +177,7 @@ public class ProductServiceTest
                               .ReturnsAsync(productList);
             
         // Act
-        List<ProductResponse> productResponseList_fromService = await _productService.GetAllProducts();
+        List<ProductResponse> productResponseList_fromService = await _productService.GetAllProducts(null);
 
 
         // Assert
