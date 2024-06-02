@@ -4,5 +4,82 @@
         <name>API</name>
     </assembly>
     <members>
+        <member name="M:Web.Controllers.ProductController.GetProducts">
+            <summary>
+            Get All Existing Products
+            </summary>
+            <returns>The Products List</returns>
+            <remarks>       
+            Sample request:
+            
+                Get -> "api/product"
+            
+            </remarks>
+            <response code="200">The Products List is successfully returned</response>
+        </member>
+        <member name="M:Web.Controllers.ProductController.PostProduct(Core.DTO.ProductRequest)">
+            <summary>
+            Add a New Product to Products List
+            </summary>
+            <returns>Redirect to 'GetProduct' action to return Product That Has Been Added</returns>
+            <remarks>       
+            Sample request:
+            
+                POST -> "api/product"
+                {
+                   "Name": "DVD No.1",
+                   "IsAvailable": true 
+                }
+            
+            </remarks>
+            <response code="201">The New Product is successfully added to Products List</response>
+            <response code="400">There is sth wrong in Validation of properties</response>
+        </member>
+        <member name="M:Web.Controllers.ProductController.GetProduct(Core.DTO.ProductKey)">
+            <summary>
+            Get an Existing Product Based On Given ID
+            </summary>
+            <returns>The Product That Has Been Found</returns>
+            <remarks>       
+            Sample request:
+            
+                Get -> "api/product/0866469B-A885-41AA-915C-F5697514CC26"
+            
+            </remarks>
+            <response code="200">The Product is successfully found and returned</response>
+            <response code="404">A Product with Given ID has not been found</response>
+        </member>
+        <member name="M:Web.Controllers.ProductController.PutProduct(Core.DTO.ProductRequest,Core.DTO.ProductKey)">
+            <summary>
+            Update an Existing Product Based on Given ID and New Product Object
+            </summary>
+            <returns>Nothing</returns>
+            <remarks>       
+            Sample request:
+            
+                Put -> "api/product/0866469B-A885-41AA-915C-F5697514CC26"
+                {
+                   "Name": "DVD No.1",
+                   "IsAvailable": true 
+                }
+            
+            </remarks>
+            <response code="204">The Product is successfully found and has been updated with New Product</response>
+            <response code="404">A Product with Given ID has not been found</response>
+        </member>
+        <member name="M:Web.Controllers.ProductController.DeleteProduct(Core.DTO.ProductKey)">
+            <summary>
+            Delete an Existing Product Based on Given ID
+            </summary>
+            <returns>Nothing</returns>
+            <remarks>       
+            Sample request:
+            
+                Delete -> "api/product/0866469B-A885-41AA-915C-F5697514CC26"
+            
+            </remarks>
+            <response code="204">The Product is successfully found and has been deleted from Products List</response>
+            <response code="404">A Product with Given ID has not been found</response>
+        </member>
     </members>
 </doc>
