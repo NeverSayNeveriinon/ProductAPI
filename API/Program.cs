@@ -1,4 +1,5 @@
 using System.Text;
+using API.Helpers;
 using Core;
 using Core.Domain;
 using Core.Domain.RepositoryContracts;
@@ -105,13 +106,7 @@ public class Program
         var app = builder.Build();
         
         
-        // using (var scope = app.Services.CreateScope())
-        // {
-        //     var context = scope.ServiceProvider.GetService<AppDbContext>();
-        //     context?.Database.EnsureDeleted();
-        //     context?.Database.EnsureCreated();
-        //     // context?.Database.Migrate();
-        // }
+        app.CreateDatabase<AppDbContext>();
 
         // Middlewares //
         
