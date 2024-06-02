@@ -36,12 +36,12 @@ public class ProductController : ControllerBase
     /// <remarks>       
     /// Sample request:
     /// 
-    ///     Get -> "api/product"
+    ///     Get -> "api/products"
     /// 
     /// </remarks>
     /// <response code="200">The Products List is successfully returned</response>
     [HttpGet("/api/Products")]
-    // GET: api/Product
+    // GET: api/Products
     public async Task<ActionResult<IEnumerable<ProductResponse>>> GetProducts()
     {
         List<ProductResponse> productsList = await _productService.GetAllProducts();
@@ -65,43 +65,34 @@ public class ProductController : ControllerBase
     /// </remarks>
     /// <response code="201">The New Product is successfully added to Products List</response>
     /// <response code="400">There is sth wrong in Validation of properties</response>
+    /// <response code="401">Unauthorized: Please Enter Valid JWT Token</response>
     [HttpPost]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     // Post: api/Product
     public async Task<IActionResult> PostProduct(ProductRequest product)
     {
-        // No need to do this, because it is done by 'ApiController' attribute in BTS
-        // if (!ModelState.IsValid)
-        // {
-        //     return ValidationProblem(ModelState);
-        // }
-        
         var productResponse = await _productService.AddProduct(product);
-        var productKeyResponse = new ProductKey()
-        {
-            ManufactureEmail = productResponse.ManufactureEmail,
-            ProduceDate = productResponse.ProduceDate
-        };
         
-        return CreatedAtAction(nameof(GetProduct), new {productKey = productKeyResponse}, product);
+        return CreatedAtAction(nameof(GetProduct), new {ProduceDate = productResponse.ProduceDate,
+                                                         ManufactureEmail = productResponse.ManufactureEmail}, product);
     }
     
     
     
     /// <summary>
-    /// Get an Existing Product Based On Given ID
+    /// Get an Existing Product Based On Given Key (Date &amp; Email)
     /// </summary>
     /// <returns>The Product That Has Been Found</returns>
     /// <remarks>       
     /// Sample request:
     /// 
-    ///     Get -> "api/product/0866469B-A885-41AA-915C-F5697514CC26"
+    ///     Get -> "api/product/ProduceDate=...&amp;ManufactureEmail=..."
     /// 
     /// </remarks>
     /// <response code="200">The Product is successfully found and returned</response>
-    /// <response code="404">A Product with Given ID has not been found</response>
+    /// <response code="404">A Product with Given Key (Date &amp; Email) has not been found</response>
     [HttpGet]
-    // GET: api/Product/{productID}
+    // GET: api/Product/ProduceDate=...&ManufactureEmail=...
     public async Task<ActionResult<ProductResponse>> GetProduct([FromQuery]ProductKey productKey)
     {
         ProductResponse? productObject = await _productService.GetProductByKey(productKey);
@@ -115,26 +106,33 @@ public class ProductController : ControllerBase
     
     
     /// <summary>
-    /// Update an Existing Product Based on Given ID and New Product Object
+    /// Update an Existing Product Based on Given Key (Date &amp; Email) and New Product Object
     /// </summary>
     /// <returns>Nothing</returns>
     /// <remarks>       
     /// Sample request:
     /// 
-    ///     Put -> "api/product/0866469B-A885-41AA-915C-F5697514CC26"
+    ///     Put -> "api/product/ProduceDate=...&amp;ManufactureEmail=..."
     ///     {
-    ///        "Name": "DVD No.1",
-    ///        "IsAvailable": true 
+    ///        "Name": "DVD No.1 is Edited",
+    ///        "IsAvailable": false 
     ///     }
     /// 
     /// </remarks>
     /// <response code="204">The Product is successfully found and has been updated with New Product</response>
-    /// <response code="404">A Product with Given ID has not been found</response>
-    [HttpPut("{productID:guid}")]
+    /// <response code="400">Something Wrong Happened With Permission</response>
+    /// <response code="404">A Product with Given Key (Date &amp; Email) has not been found</response>
+    /// <response code="401">Unauthorized: Please Enter Valid JWT Token</response>
+    [HttpPut]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    // Put: api/Product/{productID}
-    public async Task<IActionResult> PutProduct([FromBody]ProductRequest product, [FromRoute]ProductKey productKey)
+    // Put: api/Product/ProduceDate=...&ManufactureEmail=...
+    public async Task<IActionResult> PutProduct([FromBody]ProductRequest product, [FromQuery]ProductKey productKey)
     {
+        if (productKey.ManufactureEmail != User.Identity?.Name)
+        {
+            return Problem("You Can't Update/Delete the product you haven't Created!!!",statusCode:400);
+        }
+        
         ProductResponse? existingCity = await _productService.UpdateProduct(product, productKey);
         
         if (existingCity is null)
@@ -147,22 +145,29 @@ public class ProductController : ControllerBase
     
     
     /// <summary>
-    /// Delete an Existing Product Based on Given ID
+    /// Delete an Existing Product Based on Given Key (Date &amp; Email)
     /// </summary>
     /// <returns>Nothing</returns>
     /// <remarks>       
     /// Sample request:
     /// 
-    ///     Delete -> "api/product/0866469B-A885-41AA-915C-F5697514CC26"
+    ///     Delete -> "api/product/ProduceDate=...&amp;ManufactureEmail=..."
     /// 
     /// </remarks>
     /// <response code="204">The Product is successfully found and has been deleted from Products List</response>
-    /// <response code="404">A Product with Given ID has not been found</response>
-    [HttpDelete("{productID:guid}")]
+    /// <response code="400">Something Wrong Happened With Permission</response>
+    /// <response code="404">A Product with Given Key (Date &amp; Email) has not been found</response>
+    /// <response code="401">Unauthorized: Please Enter Valid JWT Token</response>
+    [HttpDelete]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    // Delete: api/Product/{productID}
-    public async Task<IActionResult> DeleteProduct(ProductKey productKey)
+    // Delete: api/Product/ProduceDate=...&ManufactureEmail=...
+    public async Task<IActionResult> DeleteProduct([FromQuery]ProductKey productKey)
     {
+        if (productKey.ManufactureEmail != User.Identity?.Name)
+        {
+            return Problem("You Can't Update/Delete the product you haven't Created!!!");
+        }
+        
         bool? productObject = await _productService.DeleteProduct(productKey);
         if (productObject is null)
         {

@@ -13,7 +13,6 @@ public class ProductService : IProductService
 {
     private readonly IProductRepository _productRepository;
     private readonly IHttpContextAccessor _httpContextAccessor;
-    // private readonly HttpContext _httpContext;
     private readonly UserManager<ApplicationUser> _userManager;
 
     public ProductService(IProductRepository productRepository, UserManager<ApplicationUser> userManager, IHttpContextAccessor httpContextAccessor)
@@ -21,7 +20,6 @@ public class ProductService : IProductService
         _productRepository = productRepository;
         _userManager = userManager;
         _httpContextAccessor = httpContextAccessor;
-        // _httpContext = httpContextAccessor.HttpContext!;
     }
 
 
@@ -97,9 +95,6 @@ public class ProductService : IProductService
         ArgumentException.ThrowIfNullOrEmpty(productUpdateRequest.Name,"The 'Product Name' in 'ProductRequest' object can't be blank");
 
         
-        // Validation
-        // ValidationHelper.ModelValidation(productUpdateRequest);
-
         Product? product = await _productRepository.GetProductByKey(productKey);
         
         // if 'ID' is invalid (doesn't exist)

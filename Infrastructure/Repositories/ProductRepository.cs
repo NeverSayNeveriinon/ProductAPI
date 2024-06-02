@@ -46,9 +46,7 @@ public class ProductRepository : IProductRepository
     
     public async Task<Product> UpdateProduct(Product product, Product updatedProduct)
     {
-        // _dbContext.Attach(product);
-        // _dbContext.Entry(product).State = EntityState.Modified;
-        // _dbContext.Entry(product).CurrentValues.SetValues(updatedProduct);
+        _dbContext.Entry(product).State = EntityState.Modified;
 
         product.Name = updatedProduct.Name;
         product.IsAvailable = updatedProduct.IsAvailable;

@@ -9,8 +9,4 @@
     &lt;TestId&gt;xUnit::ABA75CCB-2468-44CB-8483-08E8A89A4D1D::net8.0::XUnit_Tests.UnitTest.Services.ProductServiceTest&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=c8254795_002D4993_002D45ca_002D8fe0_002D60c08fe009a0/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="AddProduct_Valid" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
-  &lt;TestAncestor&gt;&#xD;
-    &lt;TestId&gt;xUnit::ABA75CCB-2468-44CB-8483-08E8A89A4D1D::net8.0::XUnit_Tests.UnitTest.Services.ProductServiceTest.AddProduct_Valid&lt;/TestId&gt;&#xD;
-  &lt;/TestAncestor&gt;&#xD;
-&lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
+	</wpf:ResourceDictionary>

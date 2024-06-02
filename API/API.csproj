@@ -7,8 +7,8 @@
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-      <DocumentationFile>wwwroot/ProductApp.xml</DocumentationFile>
-      <NoWarn>1701;1702;1591</NoWarn>
+      <DocumentationFile>wwwroot\ProductApp.xml</DocumentationFile>
+      <NoWarn>1701;1702;1591;1570</NoWarn>
     </PropertyGroup>
 
     <ItemGroup>
