@@ -74,7 +74,7 @@ public class ProductController : ControllerBase
         var productResponse = await _productService.AddProduct(product);
         
         return CreatedAtAction(nameof(GetProduct), new {ProduceDate = productResponse.ProduceDate,
-                                                         ManufactureEmail = productResponse.ManufactureEmail}, product);
+                                                         ManufactureEmail = productResponse.ManufactureEmail}, productResponse);
     }
     
     
