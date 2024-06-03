@@ -1,17 +1,17 @@
-﻿using System.Linq.Expressions;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
-using Core.Domain;
+using Xunit;
 using Moq;
-
-using Core.Domain.RepositoryContracts;
-using Core.DTO;
-using Core.ServiceContracts;
-using Core.Services;
 using FluentAssertions;
 using Mapster;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using Xunit;
+
+using Core.Domain;
+using Core.Domain.RepositoryContracts;
+using Core.DTO.Product;
+using Core.Services;
+using Core.ServiceContracts;
+
 
 namespace XUnit_Tests.UnitTest.Services;
 

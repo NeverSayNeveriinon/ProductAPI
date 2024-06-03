@@ -144,7 +144,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("ManufactureEmail", "ProduceDate");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>

@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
 
+
 namespace Core.Domain;
 
 // Key: {ProduceDate, ManufactureEmail}

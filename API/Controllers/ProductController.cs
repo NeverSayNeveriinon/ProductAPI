@@ -1,11 +1,10 @@
-﻿using Core.Domain;
-using Core.DTO;
-using Core.ServiceContracts;
-using Core.Services;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+
+using Core.DTO.Product;
+using Core.ServiceContracts;
+
 
 namespace Web.Controllers;
 

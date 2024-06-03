@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Core.DTO;
+
+namespace Core.DTO.Product;
 
 public class ProductRequest
 {

@@ -1,7 +1,8 @@
-﻿using Infrastructure.DatabaseContext;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+
 
 namespace API.Helpers;
+
 public static class WebApplicationExtensions
 {
     public static void CreateDatabase<T>(this WebApplication app) where T : DbContext

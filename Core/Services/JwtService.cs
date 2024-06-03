@@ -1,12 +1,14 @@
-﻿using System.IdentityModel.Tokens.Jwt;
+﻿using System.Text;
+using Microsoft.Extensions.Configuration;
 using System.Security.Claims;
-using System.Text;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.IdentityModel.Tokens;
+using JwtRegisteredClaimNames = Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames;
+
 using Core.Domain;
 using Core.DTO;
 using Core.ServiceContracts;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
-using JwtRegisteredClaimNames = Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames;
+
 
 namespace Core.Services;
 

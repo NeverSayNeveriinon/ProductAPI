@@ -1,9 +1,11 @@
 ﻿using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
+
 using Core.Domain;
 using Core.Domain.RepositoryContracts;
-using Core.DTO;
+using Core.DTO.Product;
 using Infrastructure.DatabaseContext;
-using Microsoft.EntityFrameworkCore;
+
 
 namespace Infrastructure.Repositories;
 

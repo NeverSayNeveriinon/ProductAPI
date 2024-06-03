@@ -1,4 +1,5 @@
-﻿using Core.DTO;
+﻿using Core.DTO.Product;
+
 
 namespace Core.ServiceContracts;
 

@@ -1,7 +1,8 @@
-﻿using Core.Domain;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+
+using Core.Domain;
+
 
 namespace Infrastructure.DatabaseContext;
 
