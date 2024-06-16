@@ -4,7 +4,7 @@
         <name>API</name>
     </assembly>
     <members>
-        <member name="M:Web.Controllers.ProductController.GetProducts(System.String)">
+        <member name="M:API.Controllers.ProductController.GetProducts(System.String)">
             <summary>
             Get All Existing Products
             </summary>
@@ -17,7 +17,7 @@
             </remarks>
             <response code="200">The Products List is successfully returned</response>
         </member>
-        <member name="M:Web.Controllers.ProductController.PostProduct(Core.DTO.Product.ProductRequest)">
+        <member name="M:API.Controllers.ProductController.PostProduct(Core.Products.Commands.CreateProduct.CreateProductCommand)">
             <summary>
             Add a New Product to Products List
             </summary>
@@ -36,7 +36,7 @@
             <response code="400">There is sth wrong in Validation of properties</response>
             <response code="401">Unauthorized: Please Enter Valid JWT Token</response>
         </member>
-        <member name="M:Web.Controllers.ProductController.GetProduct(Core.DTO.Product.ProductKey)">
+        <member name="M:API.Controllers.ProductController.GetProduct(Core.Products.Common_DTOs.ProductKey)">
             <summary>
             Get an Existing Product Based On Given Key (Date &amp; Email)
             </summary>
@@ -50,7 +50,7 @@
             <response code="200">The Product is successfully found and returned</response>
             <response code="404">A Product with Given Key (Date &amp; Email) has not been found</response>
         </member>
-        <member name="M:Web.Controllers.ProductController.PutProduct(Core.DTO.Product.ProductRequest,Core.DTO.Product.ProductKey)">
+        <member name="M:API.Controllers.ProductController.PutProduct(Core.Products.Commands.UpdateProduct.UpdateProductCommand,Core.Products.Common_DTOs.ProductKey)">
             <summary>
             Update an Existing Product Based on Given Key (Date &amp; Email) and New Product Object
             </summary>
@@ -70,7 +70,7 @@
             <response code="404">A Product with Given Key (Date &amp; Email) has not been found</response>
             <response code="401">Unauthorized: Please Enter Valid JWT Token</response>
         </member>
-        <member name="M:Web.Controllers.ProductController.DeleteProduct(Core.DTO.Product.ProductKey)">
+        <member name="M:API.Controllers.ProductController.DeleteProduct(Core.Products.Common_DTOs.ProductKey)">
             <summary>
             Delete an Existing Product Based on Given Key (Date &amp; Email)
             </summary>

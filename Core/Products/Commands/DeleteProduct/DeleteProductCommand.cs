@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Core.DTO.Product;
+using Core.Products.Common_DTOs;
 using MediatR;
 
 namespace Core.Products.Commands.DeleteProduct;

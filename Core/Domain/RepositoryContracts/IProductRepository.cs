@@ -1,6 +1,5 @@
 ﻿using System.Linq.Expressions;
-
-using Core.DTO.Product;
+using Core.Products.Common_DTOs;
 
 
 namespace Core.Domain.RepositoryContracts;

@@ -1,22 +1,20 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using System.Security.Claims;
-using Xunit;
-using Moq;
-using FluentAssertions;
-using Mapster;
-
+﻿using System.Security.Claims;
 using Core.Domain;
 using Core.Domain.RepositoryContracts;
-using Core.DTO.Product;
 using Core.Products.Commands.CreateProduct;
 using Core.Products.Commands.DeleteProduct;
 using Core.Products.Commands.UpdateProduct;
-using Core.Services;
-using Core.ServiceContracts;
+using Core.Products.Common_DTOs;
+using Core.Products.Queries.GetAllProducts;
+using Core.Products.Queries.GetProduct;
+using FluentAssertions;
+using Mapster;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Moq;
+using Xunit;
 
-
-namespace XUnit_Tests.UnitTest.Services;
+namespace XUnit_Tests.UnitTest.Handlers;
 
 public class ProductHandlerTest
 {

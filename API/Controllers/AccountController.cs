@@ -1,12 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-
-using Core.Domain;
+﻿using Core.Domain;
 using Core.DTO;
 using Core.ServiceContracts;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 
-
-namespace Web.Controllers;
+namespace API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]

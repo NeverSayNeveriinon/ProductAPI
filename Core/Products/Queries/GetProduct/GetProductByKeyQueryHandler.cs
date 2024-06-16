@@ -1,13 +1,10 @@
 ﻿using Core.Domain;
 using Core.Domain.RepositoryContracts;
-using Core.DTO.Product;
-using Core.Helpers;
+using Core.Products.Common_DTOs;
 using Mapster;
 using MediatR;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 
-namespace Core.Products.Commands.CreateProduct;
+namespace Core.Products.Queries.GetProduct;
 
 public class GetProductByKeyQueryHandler : IRequestHandler<GetProductByKeyQuery,ProductResponse?>
 {

@@ -1,6 +1,6 @@
 ﻿using Core.Domain;
 using Core.Domain.RepositoryContracts;
-using Core.DTO.Product;
+using Core.Products.Common_DTOs;
 using Mapster;
 using MediatR;
 

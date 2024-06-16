@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Core.DTO.Product;
+namespace Core.Products.Common_DTOs;
 
 public class ProductKey
 {

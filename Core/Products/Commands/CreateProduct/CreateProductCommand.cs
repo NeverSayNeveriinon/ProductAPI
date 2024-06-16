@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Core.Products.Common_DTOs;
 using MediatR;
 
-
-namespace Core.DTO.Product;
+namespace Core.Products.Commands.CreateProduct;
 
 public class CreateProductCommand : IRequest<ProductResponse>
 {

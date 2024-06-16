@@ -1,14 +1,15 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Core.Products.Commands.CreateProduct;
+using Core.Products.Commands.DeleteProduct;
+using Core.Products.Commands.UpdateProduct;
+using Core.Products.Common_DTOs;
+using Core.Products.Queries.GetAllProducts;
+using Core.Products.Queries.GetProduct;
+using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-using Core.DTO.Product;
-using Core.Products.Commands.DeleteProduct;
-using Core.ServiceContracts;
-using MediatR;
-
-
-namespace Web.Controllers;
+namespace API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]

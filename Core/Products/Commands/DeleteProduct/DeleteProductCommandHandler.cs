@@ -1,6 +1,5 @@
 ﻿using Core.Domain;
 using Core.Domain.RepositoryContracts;
-using Core.DTO.Product;
 using MediatR;
 
 namespace Core.Products.Commands.DeleteProduct;
