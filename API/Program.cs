@@ -9,6 +9,7 @@ using Microsoft.OpenApi.Models;
 using API.Helpers;
 using Core.Domain;
 using Core.Domain.RepositoryContracts;
+using Core.DTO.Product;
 using Core.ServiceContracts;
 using Core.Services;
 using Infrastructure.DatabaseContext;
@@ -26,9 +27,13 @@ public class Program
         
         // Services IOC
         builder.Services.AddScoped<IProductRepository, ProductRepository>();
-        builder.Services.AddScoped<IProductService, ProductService>();
         builder.Services.AddTransient<IJwtService, JwtService>();
         
+        builder.Services.AddMediatR(a =>
+        {
+            a.RegisterServicesFromAssemblies([typeof(Program).Assembly, typeof(CreateProductCommand).Assembly]);
+        });
+
         
         // Database IOC
         var DBconnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -106,7 +111,7 @@ public class Program
         var app = builder.Build();
         
         
-        app.CreateDatabase<AppDbContext>();
+        // app.CreateDatabase<AppDbContext>();
 
         // Middlewares //
         
