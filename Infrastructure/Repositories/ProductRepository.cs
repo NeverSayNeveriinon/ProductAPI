@@ -40,10 +40,11 @@ public class ProductRepository : IProductRepository
      
     public async Task<Product> AddProduct(Product product)
     {
-        _dbContext.Products.Add(product);
+        var entity = _dbContext.Products.Add(product);
         await _dbContext.SaveChangesAsync();
 
-        return product;
+        Product productEntity = entity.Entity;
+        return productEntity;
     }
     
     public async Task<Product> UpdateProduct(Product product, Product updatedProduct)
