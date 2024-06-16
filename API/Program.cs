@@ -9,7 +9,7 @@ using Microsoft.OpenApi.Models;
 using API.Helpers;
 using Core.Domain;
 using Core.Domain.RepositoryContracts;
-using Core.DTO.Product;
+using Core.Products.Commands.CreateProduct;
 using Core.ServiceContracts;
 using Core.Services;
 using Infrastructure.DatabaseContext;
@@ -111,7 +111,7 @@ public class Program
         var app = builder.Build();
         
         
-        // app.CreateDatabase<AppDbContext>();
+        app.CreateDatabase<AppDbContext>();
 
         // Middlewares //
         
