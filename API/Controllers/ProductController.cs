@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 using Core.DTO.Product;
+using Core.Products.Commands.DeleteProduct;
 using Core.ServiceContracts;
+using MediatR;
 
 
 namespace Web.Controllers;
@@ -12,11 +14,11 @@ namespace Web.Controllers;
 [ApiController]
 public class ProductController : ControllerBase
 {
-    private readonly IProductService _productService;
+    private readonly IMediator _mediator;
     
-    public ProductController(IProductService productService)
+    public ProductController(IMediator mediator)
     {
-        _productService = productService;
+        _mediator = mediator;
     }
     
     [Route("/")]
@@ -41,9 +43,10 @@ public class ProductController : ControllerBase
     /// <response code="200">The Products List is successfully returned</response>
     [HttpGet("/api/Products")]
     // GET: api/Products
-    public async Task<ActionResult<IEnumerable<ProductResponse>>> GetProducts([FromQuery] string? filterEmail)
+    public async Task<ActionResult<IEnumerable<ProductResponse>>> GetProducts([FromQuery] string? filterByEmail)
     {
-        List<ProductResponse> productsList = await _productService.GetAllProducts(filterEmail);
+        GetAllProductsQuery query = new GetAllProductsQuery() { FilterByEmail = filterByEmail };
+        List<ProductResponse> productsList = await _mediator.Send(query);
         return Ok(productsList);
     }
     
@@ -68,12 +71,14 @@ public class ProductController : ControllerBase
     [HttpPost]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     // Post: api/Product
-    public async Task<IActionResult> PostProduct(ProductRequest product)
+    public async Task<ActionResult<ProductResponse>> PostProduct(CreateProductCommand command)
     {
-        var productResponse = await _productService.AddProduct(product);
+        var productResponse = await _mediator.Send(command);
         
-        return CreatedAtAction(nameof(GetProduct), new {ProduceDate = productResponse.ProduceDate,
-                                                         ManufactureEmail = productResponse.ManufactureEmail}, productResponse);
+        // return CreatedAtAction(nameof(GetProduct), new {ProduceDate = productResponse.ProduceDate,
+        //                                                  ManufactureEmail = productResponse.ManufactureEmail}, productResponse);
+        return Ok(productResponse);
+
     }
     
     
@@ -94,7 +99,9 @@ public class ProductController : ControllerBase
     // GET: api/Product/ProduceDate=...&ManufactureEmail=...
     public async Task<ActionResult<ProductResponse>> GetProduct([FromQuery]ProductKey productKey)
     {
-        ProductResponse? productObject = await _productService.GetProductByKey(productKey);
+        GetProductByKeyQuery query = new GetProductByKeyQuery() { ProductKey = productKey };
+
+        ProductResponse? productObject = await _mediator.Send(query);
         if (productObject is null)
         {
             return NotFound("notfound:");
@@ -125,20 +132,22 @@ public class ProductController : ControllerBase
     [HttpPut]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     // Put: api/Product/ProduceDate=...&ManufactureEmail=...
-    public async Task<IActionResult> PutProduct([FromBody]ProductRequest product, [FromQuery]ProductKey productKey)
+    public async Task<IActionResult> PutProduct([FromBody]UpdateProductCommand command, [FromQuery]ProductKey productKey)
     {
-        if (productKey.ManufactureEmail != User.Identity?.Name)
+        command.ProductKey = productKey;
+        
+        if (command.ProductKey.ManufactureEmail != User.Identity?.Name)
         {
             return Problem("You Can't Update/Delete the product you haven't Created!!!",statusCode:400);
         }
         
-        ProductResponse? existingCity = await _productService.UpdateProduct(product, productKey);
+        ProductResponse? existingCity = await _mediator.Send(command);
         
         if (existingCity is null)
         {
             return NotFound("notfound:");
         }
-        
+            
         return NoContent();
     }
     
@@ -162,12 +171,14 @@ public class ProductController : ControllerBase
     // Delete: api/Product/ProduceDate=...&ManufactureEmail=...
     public async Task<IActionResult> DeleteProduct([FromQuery]ProductKey productKey)
     {
-        if (productKey.ManufactureEmail != User.Identity?.Name)
+        DeleteProductCommand command = new DeleteProductCommand() { ProductKey = productKey };
+
+        if (command.ProductKey.ManufactureEmail != User.Identity?.Name)
         {
             return Problem("You Can't Update/Delete the product you haven't Created!!!");
         }
         
-        bool? productObject = await _productService.DeleteProduct(productKey);
+        bool? productObject = await _mediator.Send(command);
         if (productObject is null)
         {
             return NotFound("notfound:");
