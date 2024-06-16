@@ -1,9 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using MediatR;
 
 
 namespace Core.DTO.Product;
 
-public class ProductRequest
+public class CreateProductCommand : IRequest<ProductResponse>
 {
     [Required(ErrorMessage = "The 'Product Name' Can't Be Blank!!!")]
     [StringLength(50, ErrorMessage = "The 'Product Name' Can't Be More Than 50 Characters")]
